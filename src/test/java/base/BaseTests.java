@@ -1,37 +1,30 @@
 package base;
 
+import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
-import io.github.bonigarcia.wdm.WebDriverManager;
+import page.HomePage;
 
 public class BaseTests {
-
     protected WebDriver driver;
+    protected HomePage homePage;
 
     @BeforeClass
     public void setUp() {
-        // Automatically download and setup correct ChromeDriver
+        // Automatically download and setup the correct ChromeDriver version
         WebDriverManager.chromedriver().setup();
-
-        // Configure Chrome to run in headless mode for CI
-        ChromeOptions options = new ChromeOptions();
-        options.addArguments("--headless"); // no GUI
-        options.addArguments("--no-sandbox"); // required for CI
-        options.addArguments("--disable-dev-shm-usage"); // avoid /dev/shm issues
-        options.addArguments("--disable-gpu"); // optional, avoids GPU errors
-        options.addArguments("--window-size=1920,1080"); // optional, default window size
-
-        // Initialize Chrome driver with options
-        driver = new ChromeDriver(options);
+        driver = new ChromeDriver();
+        driver.manage().window().maximize();
+        driver.get("https://practicesoftwaretesting.com/");
+        homePage = new HomePage(driver);
     }
 
     @AfterClass
     public void tearDown() {
-        if (driver != null) {
-            driver.quit(); // close browser
-        }
+//        if (driver != null) {
+//            driver.quit();
+//        }
     }
 }
