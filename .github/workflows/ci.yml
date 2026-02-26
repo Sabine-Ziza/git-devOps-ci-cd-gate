@@ -1,0 +1,45 @@
+name: Java Maven CI
+
+on:
+  push:
+    branches:
+      - main
+      - dev
+      - ft/pipeline
+  pull_request:
+    branches:
+      - dev
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    # Step 1: Checkout the repo
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    # Step 2: Set up Java
+    - name: Set up Java
+      uses: actions/setup-java@v3
+      with:
+        distribution: 'temurin'
+        java-version: '17'
+
+
+    # Step 3: Cache Maven dependencies
+    - name: Cache Maven packages
+      uses: actions/cache@v3
+      with:
+        path: ~/.m2/repository
+        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+        restore-keys: |
+          ${{ runner.os }}-maven-
+
+    # Step 4: Install dependencies (skip tests for speed)
+    - name: Install dependencies
+      run: mvn clean install -DskipTests=true
+
+    # Step 5: Run automated tests
+    - name: Run tests
+      run: mvn test
