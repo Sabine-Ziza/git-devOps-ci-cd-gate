@@ -26,6 +26,12 @@ jobs:
         distribution: 'temurin'
         java-version: '17'
         
+    # Step 2.5: Setup Chrome)
+    - name: Setup Chrome
+      uses: browser-actions/setup-chrome@v1
+      with:
+        chrome-version: '145.0.7632.117'   
+        
     # Steps 3: Cashe Mavern dependencies
     - name: Cache Maven packages
       uses: actions/cache@v3
