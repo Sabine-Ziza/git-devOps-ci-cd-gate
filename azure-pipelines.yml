@@ -1,0 +1,23 @@
+trigger:
+- main
+
+pool:
+  name: 'Default'
+  demands:
+    - Agent.Name -equals SABINE-AGENT
+
+steps:
+- task: CopyFiles@2
+  displayName: 'Stage Project Files'
+  inputs:
+    SourceFolder: '$(Build.SourcesDirectory)'
+    Contents: '**'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)'
+
+- script: echo Hello, world! Running on SABINE-AGENT
+  displayName: 'Run a one-line script'
+
+- script: |
+    echo The pipeline structure is now valid.
+    mvn -version
+  displayName: 'Verify Maven on Agent'
